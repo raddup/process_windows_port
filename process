@@ -1,0 +1,11 @@
+Get-NetTCPConnection | Where-Object { $_.State -eq 'Established' } | ForEach-Object {
+    $process = Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue
+    [PSCustomObject]@{
+        ProcessName  = $process.Name
+        ProcessId    = $_.OwningProcess
+        LocalAddress = $_.LocalAddress
+        LocalPort    = $_.LocalPort
+        RemoteAddress = $_.RemoteAddress
+        RemotePort   = $_.RemotePort
+    }
+} | Format-Table -AutoSize
